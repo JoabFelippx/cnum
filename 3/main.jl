@@ -39,7 +39,7 @@ a, b = 2.5, 2.6
 println(bisection(a, b, f, tol), '\n')
 
 
-println("3.2.3 - exercício")
+println("3.2.8 - exercício")
 #3.2.8
 I_r = 10^-12
 V_t = ((1.38*10^-23)*(300))/(1.60*10^-19)
