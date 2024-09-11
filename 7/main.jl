@@ -1,0 +1,120 @@
+using LinearAlgebra
+
+# bissecção
+function bisection(a, b, f, tol)
+        if f(a) * f(b) > 0
+            # Caso não haja mudança de sinal no intervalo
+            error("f(a) and f(b) must have opposite signs")
+        end
+        while b - a > tol
+            c = (a + b) / 2
+            if f(c) == 0
+                return c
+            elseif f(a) * f(c) < 0
+                b = c
+            else
+                a = c
+            end
+        end
+        return (a + b) / 2
+    end
+    
+# gauss-seidel
+function seidel(A, B, k, error)
+        n = size(B,1)
+        X = zeros(n)
+        K = zeros(n)
+        for l = 1:k
+        for i = 1:n
+            count = [0.0 0.0]
+            for j = 1:i-1
+            count[1] += A[i,j]*K[j]
+            end
+            for j = i+1:n
+            count[2] += A[i,j]*X[j]
+            end
+            K[i] = (B[i]-count[1]-count[2])/A[i,i]
+        end
+        if norm(X-K) < error
+            break
+        end
+        X = copy(K)
+        end
+        return X
+end 
+
+# 1 - Para economizar energia elétrica, um agricultor implantou um sistema de painel solar na fazenda para alimentar uma bomba d'água, que faz a irrigação das plantações. A placa negra utilizada fica exposta ao sol e ao vento. Dessa forma, para gerar eletricidade, a irradiação solar E (em Wm-2) sobre a placa tem que ser maior que a perda de calor por radiação e por condução, dado a temperatura atmosférica K (em Kelvin). Sabendo que para determinar a temperatura da placa para alcançar esse desequilíbrio é dado pela equação:
+
+# E = 5,67.10-8 T4 + 0,4(T - K)
+
+# Determine a temperatura mínima da placa, dada a medição da irradiação e da temperatura do ar, sabendo que o valor médio diário é E=500,125 e K=272,975.
+# Sugestão: usar métodos da bissecção ou ponto fixo.
+# Resposta aproximada: T = 304,56801011987010952
+
+
+E = 500.125
+K = 272.975
+
+f(x) = 5.67e-8*x^4 + 0.4*(x - K) - E
+
+a, b = -0.1, 500
+tol = 1e-10
+
+resposta = bisection(a, b, f, tol)
+println("Questão 1")
+println("Resposta aproximada utilizando o método da bissecção: T = ", resposta, "\n")
+
+
+# 2 - Calcule o comprimento do cabo (C) entre duas torres de transmissão (cabo catenária). A distância entre as torres é de d = 500m. A flecha máxima permitida é fmax = 50m. Flecha é a distância vertical entre uma reta que liga os dois pontos de fixação. A flecha (f) depende do comprimento do vão (d) e da tração (C) aplicada ao cabo. O seu modelo matemático pode ser:
+
+# f = C[cosh(d/2C)-1]
+# Sugestão: usar métodos da bissecção ou ponto fixo.
+# Resposta aproximada: C = 633,1621m
+
+d = 500
+fmax = 50
+
+g(x) = x*(cosh(d/(2*x))-1) - fmax
+
+a, b = 0.1, 1000
+tol = 1e-10
+
+resposta = bisection(a, b, g, tol)
+println("Questão 2")
+println("Resposta aproximada utilizando o método da bissecção: C = ", resposta, "\n")
+
+
+# 3 - Um retificador de meia onda a diodo alimenta uma carga indutiva resistiva (f = 1 kHz, L = 100 mH e R = 1 kΩ). Encontre o ângulo para o qual a corrente Id no diodo se anula. Considere o seguinte modelo matemático:
+
+# Id = sen(b - a) + sen(a).e[-b/tan(a)]
+# tan(a) = 2π.f.L / R
+# Sugestão: usar métodos da bissecção ou ponto fixo.
+# Resposta aproximada: b = 212,2284º
+
+freq = 1e3
+L = 100e-3
+R = 1e3
+tan = 2*pi*freq*L/R     
+a_v = atan(tan)
+
+f(x) = sin(x - a_v) + sin(a_v)*exp(-x/tan)
+deg2rad(degrees) = degrees * π / 180
+rad2deg(radians) = radians * 180 / π
+
+a_degtorad = deg2rad(114) # 2 radianos
+b_degtorad = deg2rad(286) # 5 radianos
+
+tol = 1e-10
+resposta = bisection(a_degtorad, b_degtorad, f, tol)
+
+println("Questão 3")
+println("Resposta aproximada utilizando o método da bissecção: b = ", rad2deg(resposta), "°", "\n")
+
+# 4 - Em um grande hospital, para se evitar intermitência no sistema elétrico dos diversos equipamentos médicos, instalou-se três reatores de alta performance em série, com tensão nominal R em função da potência máxima P de operação dos enrolamentos de controle:
+
+# 17.R1 - 2.R2 - 3.R3 = P1 = 500
+# -5.R1 + 21.R2 - 2.R3 = P2 = 200
+# -5.R1 - 5.R2 + 22.R3 = P3 = 30
+# Obtenha as tensões nominais de cada reator.
+# Sugestão: usar o método de Gauss-Seidel.
+# Resposta aproximada: R1=33,996314 R2=18,892827 R3=13,383896
