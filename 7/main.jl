@@ -118,3 +118,26 @@ println("Resposta aproximada utilizando o método da bissecção: b = ", rad2deg
 # Obtenha as tensões nominais de cada reator.
 # Sugestão: usar o método de Gauss-Seidel.
 # Resposta aproximada: R1=33,996314 R2=18,892827 R3=13,383896
+
+
+# 7 - Num sistema de energia solar, um vetor de equilíbrio energético E, na placa absorvente e na placa de vidro, segue o seguinte sistema de equações não lineares nas temperaturas (K/m²) absolutas da placa absorvente (T1) e da placa de vidro (T2):
+# (T41+ 0,06823.T1)−(T42+ 0,05848.T2) = E1
+# (T41+ 0,05848.T1)−(2.T42+ 0,11696.T2) = E2
+# Calcule o valor aproximado das temperaturas de equilíbrio, sabendo que os valores de equilíbrio energético foram medidos experimentalmente em E1=0,01753 E2=0,00254.
+# Sugestão: usar o método de Newton-Raphson.
+# Resposta aproximada: T1=0,30543 T2=0,185261
+
+
+h(x) = x - inv(jacobian(x))*F(x)
+
+F(x) = [x[1]^4 + 0.06823*x[1] - x[2]^4 - 0.05848*x[2] - 0.01753;
+        x[1]^4 + 0.05848*x[1] - 2*x[2]^4 - 0.11696*x[2] - 0.00254]
+
+jacobian(x) = [4*x[1]^3 + 0.06823 -4*x[2]^3 - 0.05848;
+               4*x[1]^3 + 0.05848 -8*x[2]^3 - 0.11696]
+
+x = [0.5, 0.5]
+resposta = fixedpoint(x, h)
+println("Questão 7")
+println("Resposta aproximada utilizando o método de Newton-Raphson: T1 = ", resposta[1], " T2 = ", resposta[2], "\n")
+
