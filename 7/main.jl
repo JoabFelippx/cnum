@@ -1,5 +1,15 @@
 using LinearAlgebra
 
+#método de newton para sistemas não lineares
+function fixedpoint(a, g, error=1e-8)
+        x = g(a)
+        while norm(x-a) > error
+            a = x
+            x = g(a)
+        end
+        return x
+    end
+
 # bissecção
 function bisection(a, b, f, tol)
         if f(a) * f(b) > 0
@@ -20,7 +30,7 @@ function bisection(a, b, f, tol)
     end
     
 # gauss-seidel
-function seidel(A, B, k, error)
+function gaussSeidel(A, B, k, error)
         n = size(B,1)
         X = zeros(n)
         K = zeros(n)
@@ -42,6 +52,7 @@ function seidel(A, B, k, error)
         end
         return X
 end 
+
 
 # 1 - Para economizar energia elétrica, um agricultor implantou um sistema de painel solar na fazenda para alimentar uma bomba d'água, que faz a irrigação das plantações. A placa negra utilizada fica exposta ao sol e ao vento. Dessa forma, para gerar eletricidade, a irradiação solar E (em Wm-2) sobre a placa tem que ser maior que a perda de calor por radiação e por condução, dado a temperatura atmosférica K (em Kelvin). Sabendo que para determinar a temperatura da placa para alcançar esse desequilíbrio é dado pela equação:
 
@@ -119,6 +130,56 @@ println("Resposta aproximada utilizando o método da bissecção: b = ", rad2deg
 # Sugestão: usar o método de Gauss-Seidel.
 # Resposta aproximada: R1=33,996314 R2=18,892827 R3=13,383896
 
+A = [17 -2 -3; -5 21 -2; -5 -5 22]
+B = [500; 200; 30]
+
+k = 100
+error_vl = 1e-10
+resposta = gaussSeidel(A, B, k, error_vl)
+println("Questão 4")
+println("Resposta aproximada utilizando o método de Gauss-Seidel: R1 = ", resposta[1], " R2 = ", resposta[2], " R3 = ", resposta[3], "\n")
+
+# 5 - Determine o valor da corrente no resistor R3, sabendo que V1 = V2 = 100 V e R1 = R2 = R3 = 10 Ω.
+# Sugestão: usar o método de Gauss-Seidel.
+# Resposta aproximada: IR3 = 6,6667A
+
+# 20x1 + 10x2 = 100
+# 10x1 + 20x2 = 100
+
+R1 = R2 = R3 = 10
+V1 = V2 = 100
+
+A = [20 10; 
+     10 20]
+B = [100; 100]
+
+k = 100
+error_vl = 1e-10
+
+I1, I2 = gaussSeidel(A, B, k, error_vl)
+
+IR3 = (V1 - I1*R1)/R3
+println("Questão 5")
+println("Resposta aproximada utilizando o método de Gauss-Seidel: IR3 = ", IR3, "\n")
+
+# 6 - Calcule as tensões para os nós, tendo por referência o nó 6. O circuito pode ser equacionado da seguinte maneira:
+# {0; 6; 0; 2; -3} = [6 -3 -3 0 0; -3 6 0 -3 0; -3 0 6 -1 -2; 0 -3 -1 5 0; 0 0 -2 3] {V1; V2; V3; V4; V5}
+
+A = [
+        6 -3 -3 0 0; 
+        -3 6 0 -3 0; 
+        -3 0 6 -1 -2; 
+        0 -3 -1 5 0; 
+        0 0 -2 0 3]
+B = [0; 6; 0; 2; -3]
+
+k = 100
+error_vl = 1e-10
+resposta = gaussSeidel(A, B, k, error_vl)
+println("Questão 6")
+println("Resposta aproximada utilizando o método de Gauss-Seidel: V1 = ", resposta[1], " V2 = ", resposta[2], " V3 = ", resposta[3], " V4 = ", resposta[4], " V5 = ", resposta[5], "\n")
+
+
 
 # 7 - Num sistema de energia solar, um vetor de equilíbrio energético E, na placa absorvente e na placa de vidro, segue o seguinte sistema de equações não lineares nas temperaturas (K/m²) absolutas da placa absorvente (T1) e da placa de vidro (T2):
 # (T41+ 0,06823.T1)−(T42+ 0,05848.T2) = E1
@@ -140,4 +201,3 @@ x = [0.5, 0.5]
 resposta = fixedpoint(x, h)
 println("Questão 7")
 println("Resposta aproximada utilizando o método de Newton-Raphson: T1 = ", resposta[1], " T2 = ", resposta[2], "\n")
-
