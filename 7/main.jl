@@ -1,3 +1,9 @@
+# Aluno 1: Állefe Amorim
+# Aluno 2: Gustavo Assis
+# Aluno 3: Joab Felippe
+
+
+
 using LinearAlgebra
 
 #método de newton para sistemas não lineares
