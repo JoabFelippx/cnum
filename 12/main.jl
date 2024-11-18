@@ -230,11 +230,13 @@ end
 
 # Oitava questão
 # Usar o método das regras de ponto médio.
-
+h_1 = 1e-5
 P(r) = 3(1-(r/4))^(1/7)
 # Q(r) 2pi integral de 0 a r de P(r)dr
 
-Q(r) = 2*pi*iw(P, ponto_medio, 0, r, 0.5)
+Q(r) = 2*pi*iw(P, ponto_medio, 0, r, h_1)
+
+
 
 println("\n\nQuestion 8 results: ")
 println("Q(1.25): ",  round(Q(1.25), digits=6))
@@ -245,7 +247,7 @@ println("Q(3.95): ",  round(Q(3.95), digits=6))
 # Nona questão
 # Usar o método das regras de trapézio.
 
-Q(r) = 2*pi*iw(P, trapezio, 0, r, 0.5)
+Q(r) = 2*pi*iw(P, trapezio, 0, r, h_1)
 
 println("\n\nQuestion 9 results: ")
 println("Q(1.25): ",  round(Q(1.25), digits=6))
@@ -256,7 +258,7 @@ println("Q(3.95): ",  round(Q(3.95), digits=6))
 # Décima questão
 # Usar o método das regras de Simpson.
 
-Q(r) = 2*pi*iw(P, simpson, 0, r, 0.5)
+Q(r) = 2*pi*iw(P, simpson, 0, r, h_1)
 
 println("\n\nQuestion 10 results: ")
 println("Q(1.25): ",  round(Q(1.25), digits=6))
