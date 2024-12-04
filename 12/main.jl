@@ -1,5 +1,6 @@
 # Trabalho 2
-# Aluno: Joab Felippe de Souza Lima
+# Aluno 1: Joab Felippe de Souza Lima
+# Aluno 2: Állefe Amorim
 
 using LinearAlgebra
 
